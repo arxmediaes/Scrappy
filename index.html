@@ -1,344 +1,348 @@
 <!doctype html>
-
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>ARX MEDIA — Lead Scraper</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
 
 :root {
-  --bg: #070708;
-  --panel: #101012;
-  --panel-2: #141417;
-  --border: #28282e;
-  --text: #f7f7f8;
-  --muted: #8f8f98;
-  --muted-2: #65656d;
-  --purple: #a855f7;
-  --purple-light: #c084fc;
-  --lime: #d7ff3f;
+  --black: #080808;
+  --surface: #101010;
+  --surface-2: #141414;
+  --border: #292929;
+
+  --white: #f5f5f5;
+  --gray: #8c8c8c;
+  --gray-dark: #555;
+
+  --purple: #a96cff;
+  --lime: #d9f238;
+}
+
+/* =========================================================
+   BASE
+========================================================= */
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
 }
 
 body {
-  margin: 0;
   min-height: 100vh;
+
+  background:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(169,108,255,.08),
+      transparent 35%
+    ),
+    var(--black);
+
+  color: var(--white);
+
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 30px 16px;
 
-  font-family: Inter, Arial, sans-serif;
-  color: var(--text);
-
-  background:
-    radial-gradient(
-      circle at 15% 15%,
-      rgba(168, 85, 247, .12),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 85% 85%,
-      rgba(215, 255, 63, .055),
-      transparent 28%
-    ),
-    var(--bg);
+  padding: 40px 20px;
 }
 
-/* ───────────── CONTAINER ───────────── */
+/* =========================================================
+   MAIN
+========================================================= */
 
-.card {
-  position: relative;
-  width: min(680px, 94vw);
-
-  padding: 42px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.035),
-      rgba(255,255,255,.008)
-    ),
-    var(--panel);
-
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 26px;
-
-  box-shadow:
-    0 35px 100px rgba(0,0,0,.65),
-    0 0 80px rgba(168,85,247,.045);
-
-  overflow: hidden;
+.wrapper {
+  width: 100%;
+  max-width: 610px;
 }
 
-/* Línea decorativa superior */
-
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--purple),
-    var(--purple-light),
-    var(--lime),
-    transparent
-  );
-
-  opacity: .8;
-}
-
-/* Glow decorativo */
-
-.card::after {
-  content: "";
-  position: absolute;
-  width: 260px;
-  height: 260px;
-
-  right: -150px;
-  top: -150px;
-
-  background: var(--purple);
-  opacity: .055;
-
-  filter: blur(80px);
-  pointer-events: none;
-}
-
-/* ───────────── BRAND ───────────── */
-
-.brand-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
+/* =========================================================
+   BRAND
+========================================================= */
 
 .brand {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+
+  padding: 0 3px;
+}
+
+.brand-name {
+  display: flex;
+  align-items: center;
   gap: 9px;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: .22em;
-  color: #fff;
+
+  letter-spacing: .20em;
 }
 
-.brand-dot {
-  width: 7px;
-  height: 7px;
+.brand-point {
+  width: 6px;
+  height: 6px;
 
   border-radius: 50%;
+
   background: var(--lime);
+}
+
+.brand-type {
+  font-size: 9px;
+  letter-spacing: .17em;
+
+  color: #505050;
+}
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.card {
+  position: relative;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 18px;
+
+  padding: 42px;
 
   box-shadow:
-    0 0 12px rgba(215,255,63,.65);
+    0 30px 80px rgba(0,0,0,.45);
 }
 
-.version {
+/* línea superior muy discreta */
+
+.card::before {
+  content: "";
+
+  position: absolute;
+
+  top: -1px;
+  left: 38px;
+  right: 38px;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(169,108,255,.7),
+    transparent
+  );
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header {
+  margin-bottom: 34px;
+}
+
+.eyebrow {
+  margin-bottom: 13px;
+
   font-size: 10px;
-  letter-spacing: .16em;
-  color: var(--muted-2);
-}
+  font-weight: 600;
 
-/* ───────────── HEADER ───────────── */
+  letter-spacing: .18em;
+  text-transform: uppercase;
+
+  color: var(--purple);
+}
 
 .title {
   margin: 0;
 
-  font-size: clamp(32px, 6vw, 48px);
-  line-height: .98;
+  font-size: 42px;
+  line-height: 1.02;
+
+  font-weight: 650;
+
   letter-spacing: -.045em;
-  font-weight: 750;
 }
 
 .title span {
-  color: var(--purple-light);
+  color: var(--purple);
 }
 
-.sub {
-  max-width: 510px;
+.description {
+  max-width: 470px;
 
-  margin: 15px 0 34px;
+  margin: 15px 0 0;
 
-  color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
+
+  color: var(--gray);
 }
 
-/* ───────────── FORM ───────────── */
+/* =========================================================
+   FORM
+========================================================= */
 
-.form-section {
-  margin-bottom: 20px;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  width: 100%;
 }
 
 label {
   display: block;
 
-  margin: 0 0 8px 2px;
+  margin-bottom: 8px;
 
-  color: #d7d7dc;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: .02em;
-}
 
-.field {
-  position: relative;
+  color: #c7c7c7;
 }
 
 input,
 select {
   width: 100%;
-  height: 50px;
+  height: 48px;
 
-  padding: 0 15px;
+  padding: 0 14px;
 
-  border-radius: 12px;
   border: 1px solid var(--border);
+  border-radius: 9px;
 
-  background: rgba(8,8,10,.82);
+  background: #0b0b0b;
 
-  color: #fff;
+  color: var(--white);
 
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
 
   outline: none;
 
   transition:
     border-color .2s ease,
-    box-shadow .2s ease,
-    background .2s ease,
-    transform .2s ease;
+    background .2s ease;
 }
 
 input::placeholder {
-  color: #55555e;
+  color: #4e4e4e;
 }
 
 input:hover,
 select:hover {
-  border-color: #3a3a43;
+  border-color: #363636;
 }
 
 input:focus,
 select:focus {
-  border-color: rgba(168,85,247,.8);
+  border-color: rgba(169,108,255,.75);
 
-  background: #0c0c0f;
-
-  box-shadow:
-    0 0 0 3px rgba(168,85,247,.08),
-    0 0 30px rgba(168,85,247,.07);
+  background: #0d0d0d;
 }
 
-/* Select */
+/* SELECT */
 
 select {
   appearance: none;
+
   cursor: pointer;
 
   background-image:
-    linear-gradient(45deg, transparent 50%, #888 50%),
-    linear-gradient(135deg, #888 50%, transparent 50%);
+    linear-gradient(45deg, transparent 50%, #777 50%),
+    linear-gradient(135deg, #777 50%, transparent 50%);
+
   background-position:
-    calc(100% - 18px) 21px,
-    calc(100% - 13px) 21px;
+    calc(100% - 16px) 20px,
+    calc(100% - 11px) 20px;
+
   background-size:
     5px 5px,
     5px 5px;
+
   background-repeat: no-repeat;
 }
 
 select option {
-  background: #111114;
-  color: #fff;
+  background: #111;
+  color: white;
 }
 
-/* ───────────── GRID ───────────── */
+/* =========================================================
+   TWO COLUMNS
+========================================================= */
 
-.grid {
+.row {
   display: grid;
+
   grid-template-columns: 1fr 1fr;
+
   gap: 14px;
 }
 
-/* ───────────── BUTTON ───────────── */
+/* =========================================================
+   BUTTON
+========================================================= */
 
 button {
-  position: relative;
-
   width: 100%;
-  height: 54px;
+  height: 50px;
 
-  margin-top: 10px;
+  margin-top: 4px;
 
-  border: 0;
-  border-radius: 13px;
+  border: none;
+  border-radius: 9px;
 
-  background:
-    linear-gradient(
-      100deg,
-      #f4f4f4 0%,
-      #ffffff 55%,
-      #e9d5ff 100%
-    );
+  background: var(--white);
 
-  color: #09090b;
+  color: #090909;
 
   font-family: inherit;
-  font-size: 12px;
+
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: .17em;
+
+  letter-spacing: .15em;
 
   cursor: pointer;
 
-  overflow: hidden;
-
   transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    filter .2s ease;
-}
-
-button::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(168,85,247,.20),
-    transparent
-  );
-
-  transform: translateX(-100%);
-  transition: transform .5s ease;
+    transform .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
 }
 
 button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
+
+  background: #ffffff;
 
   box-shadow:
-    0 12px 35px rgba(168,85,247,.20),
-    0 0 30px rgba(215,255,63,.06);
-}
-
-button:hover::before {
-  transform: translateX(100%);
+    0 10px 30px rgba(0,0,0,.35);
 }
 
 button:active {
@@ -348,242 +352,280 @@ button:active {
 button:disabled {
   opacity: .5;
   cursor: wait;
-  transform: none;
 }
 
-/* ───────────── STATUS ───────────── */
+/* =========================================================
+   STATUS
+========================================================= */
 
 .status {
   display: flex;
   align-items: center;
-  gap: 10px;
 
-  min-height: 48px;
+  min-height: 44px;
 
   margin-top: 14px;
-  padding: 0 15px;
 
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 12px;
+  padding: 0 13px;
 
-  background: rgba(255,255,255,.018);
+  border: 1px solid #202020;
+  border-radius: 8px;
 
-  color: var(--muted);
+  background: #0c0c0c;
 
-  font-size: 12px;
+  color: #777;
+
+  font-size: 11px;
 }
 
 .status::before {
   content: "";
 
-  flex: 0 0 auto;
+  width: 6px;
+  height: 6px;
 
-  width: 7px;
-  height: 7px;
+  margin-right: 9px;
+
+  flex-shrink: 0;
 
   border-radius: 50%;
 
   background: var(--lime);
-
-  box-shadow:
-    0 0 12px rgba(215,255,63,.55);
 }
 
-/* ───────────── FOOTER ───────────── */
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  margin-top: 32px;
+  margin-top: 30px;
   padding-top: 18px;
 
-  border-top: 1px solid rgba(255,255,255,.06);
+  border-top: 1px solid #202020;
 
-  color: var(--muted-2);
+  font-size: 9px;
 
-  font-size: 10px;
-  letter-spacing: .08em;
+  letter-spacing: .12em;
+
+  color: #484848;
 }
 
 .footer-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 
-.footer-mark {
-  width: 6px;
-  height: 6px;
+.footer-dot {
+  width: 5px;
+  height: 5px;
 
   border-radius: 50%;
 
-  background: var(--purple-light);
+  background: var(--purple);
 }
 
-.footer-right {
-  color: #45454d;
-}
+/* =========================================================
+   MOBILE
+========================================================= */
 
-/* ───────────── MOBILE ───────────── */
-
-@media(max-width:600px) {
+@media (max-width: 600px) {
 
   body {
-    padding: 18px 12px;
+    padding: 22px 14px;
   }
 
   .card {
-    padding: 28px 22px;
-    border-radius: 21px;
-  }
+    padding: 30px 23px;
 
-  .brand-row {
-    margin-bottom: 25px;
+    border-radius: 15px;
   }
 
   .title {
     font-size: 34px;
   }
 
-  .sub {
-    margin-bottom: 28px;
-  }
-
-  .grid {
+  .row {
     grid-template-columns: 1fr;
-    gap: 0;
+    gap: 20px;
   }
 
   .footer {
-    flex-direction: column;
     align-items: flex-start;
+
+    flex-direction: column;
+
     gap: 10px;
   }
 }
-</style>
 
+</style>
 </head>
+
 
 <body>
 
-<main class="card">
+<div class="wrapper">
 
-  <div class="brand-row">
-    <div class="brand">
-      <span class="brand-dot"></span>
+  <!-- BRAND -->
+
+  <div class="brand">
+
+    <div class="brand-name">
+      <span class="brand-point"></span>
       ARX MEDIA
     </div>
 
-```
-<div class="version">
-  LEAD INTELLIGENCE
-</div>
-```
+    <div class="brand-type">
+      LEAD INTELLIGENCE
+    </div>
 
   </div>
 
-  <h1 class="title">
-    Universal Lead <span>Scraper</span>
-  </h1>
 
-  <p class="sub">
-    Encuentra, enriquece y analiza negocios automáticamente.
-    Configura tu búsqueda y deja que ARX haga el resto.
-  </p>
+  <!-- CARD -->
 
-  <div class="form-section">
+  <main class="card">
 
-```
-<label>Nicho</label>
+    <header class="header">
 
-<div class="field">
-  <input
-    id="nicho"
-    placeholder="Ej. clínicas, abogados, hoteles boutique"
-  >
+      <div class="eyebrow">
+        Lead generation system
+      </div>
+
+      <h1 class="title">
+        Universal Lead <span>Scraper</span>
+      </h1>
+
+      <p class="description">
+        Encuentra, enriquece y analiza negocios automáticamente.
+        Configura los parámetros de búsqueda y deja que el sistema haga el resto.
+      </p>
+
+    </header>
+
+
+    <!-- FORM -->
+
+    <div class="form">
+
+      <div class="field">
+
+        <label for="nicho">
+          Nicho
+        </label>
+
+        <input
+          id="nicho"
+          type="text"
+          placeholder="Ej. clínicas, abogados, hoteles boutique"
+        >
+
+      </div>
+
+
+      <div class="row">
+
+        <div class="field">
+
+          <label for="pais">
+            País
+          </label>
+
+          <select id="pais">
+
+            <option>España</option>
+            <option>Portugal</option>
+            <option>Francia</option>
+            <option>Italia</option>
+            <option>Alemania</option>
+            <option>Reino Unido</option>
+            <option>Chile</option>
+            <option>México</option>
+            <option>Estados Unidos</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="ciudad">
+            Ciudad / zona
+          </label>
+
+          <input
+            id="ciudad"
+            type="text"
+            placeholder="Ej. Valencia"
+          >
+
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="cantidad">
+          Número máximo de negocios
+        </label>
+
+        <input
+          id="cantidad"
+          type="number"
+          min="1"
+          max="500"
+          value="100"
+        >
+
+      </div>
+
+
+      <button id="go">
+        INICIAR SCRAPING
+      </button>
+
+    </div>
+
+
+    <!-- STATUS -->
+
+    <div
+      class="status"
+      id="status"
+    >
+      Listo para comenzar.
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+      <div class="footer-left">
+
+        <span class="footer-dot"></span>
+
+        PROCESAMIENTO AUTOMATIZADO · N8N
+
+      </div>
+
+      <div>
+        ARX MEDIA © 2026
+      </div>
+
+    </div>
+
+  </main>
+
 </div>
-```
 
-  </div>
-
-  <div class="grid">
-
-```
-<div class="form-section">
-
-  <label>País</label>
-
-  <select id="pais">
-    <option>España</option>
-    <option>Portugal</option>
-    <option>Francia</option>
-    <option>Italia</option>
-    <option>Alemania</option>
-    <option>Reino Unido</option>
-    <option>Chile</option>
-    <option>México</option>
-    <option>Estados Unidos</option>
-  </select>
-
-</div>
-
-
-<div class="form-section">
-
-  <label>Ciudad / zona</label>
-
-  <input
-    id="ciudad"
-    placeholder="Ej. Valencia"
-  >
-
-</div>
-```
-
-  </div>
-
-  <div class="form-section">
-
-```
-<label>Número máximo de negocios</label>
-
-<input
-  id="cantidad"
-  type="number"
-  min="1"
-  max="500"
-  value="100"
->
-```
-
-  </div>
-
-  <button id="go">
-    INICIAR SCRAPING
-  </button>
-
-  <div class="status" id="status">
-    Listo para comenzar.
-  </div>
-
-  <div class="footer">
-
-```
-<div class="footer-left">
-  <span class="footer-mark"></span>
-  PROCESAMIENTO AUTOMATIZADO · N8N
-</div>
-
-<div class="footer-right">
-  ARX MEDIA © 2026
-</div>
-```
-
-  </div>
-
-</main>
 
 <script>
 
@@ -591,6 +633,7 @@ const WEBHOOK_URL =
 'https://caroyln-squeakier-syreeta.ngrok-free.dev/webhook/arx-lead-scraper';
 
 const $ = id => document.getElementById(id);
+
 
 $('go').onclick = async () => {
 
@@ -602,6 +645,7 @@ $('go').onclick = async () => {
     return;
   }
 
+
   if (!$('nicho').value.trim()) {
 
     $('status').textContent =
@@ -610,10 +654,12 @@ $('go').onclick = async () => {
     return;
   }
 
+
   $('go').disabled = true;
 
   $('status').textContent =
     'Enviando búsqueda a ARX MEDIA…';
+
 
   try {
 
@@ -621,28 +667,45 @@ $('go').onclick = async () => {
       WEBHOOK_URL,
       {
         method: 'POST',
+
         headers: {
           'Content-Type': 'application/json'
         },
+
         body: JSON.stringify({
-          nicho: $('nicho').value.trim(),
-          pais: $('pais').value,
-          ciudad: $('ciudad').value.trim(),
+
+          nicho:
+            $('nicho').value.trim(),
+
+          pais:
+            $('pais').value,
+
+          ciudad:
+            $('ciudad').value.trim(),
+
           cantidad:
             Number($('cantidad').value) || 100
+
         })
       }
     );
 
+
     $('status').textContent =
       r.ok
+
         ? 'Scraping iniciado. Puedes cerrar esta ventana; n8n continuará procesando los leads.'
-        : 'No se pudo iniciar el workflow (' + r.status + ').';
+
+        : 'No se pudo iniciar el workflow (' +
+          r.status +
+          ').';
+
 
   } catch (e) {
 
     $('status').textContent =
       'Error de conexión con n8n. Revisa la URL del webhook y CORS.';
+
 
   } finally {
 
