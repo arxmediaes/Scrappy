@@ -24,6 +24,9 @@
 
   --purple: #a96cff;
   --lime: #d9f238;
+
+  --red: #ff4d4f;
+  --green: #3ddc84;
 }
 
 /* =========================================================
@@ -265,6 +268,11 @@ select:focus {
   background: #0d0d0d;
 }
 
+input:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
 /* SELECT */
 
 select {
@@ -302,6 +310,107 @@ select option {
   grid-template-columns: 1fr 1fr;
 
   gap: 14px;
+}
+
+/* =========================================================
+   AUTO SWITCH
+========================================================= */
+
+.auto-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 13px 16px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: #0b0b0b;
+}
+
+.auto-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.auto-copy-title {
+  font-size: 12px;
+  font-weight: 700;
+
+  color: var(--white);
+}
+
+.auto-copy-sub {
+  font-size: 10.5px;
+  line-height: 1.4;
+
+  color: var(--gray);
+
+  max-width: 320px;
+}
+
+.switch {
+  position: relative;
+
+  width: 42px;
+  height: 24px;
+
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-track {
+  position: absolute;
+  inset: 0;
+
+  background: #2a2a2a;
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.switch-track::before {
+  content: "";
+
+  position: absolute;
+
+  height: 18px;
+  width: 18px;
+
+  left: 2px;
+  bottom: 2px;
+
+  border-radius: 50%;
+
+  background: #d8d8d8;
+
+  transition: transform .2s ease, background .2s ease;
+}
+
+.switch input:checked + .switch-track {
+  background: rgba(169,108,255,.35);
+  border-color: var(--purple);
+}
+
+.switch input:checked + .switch-track::before {
+  transform: translateX(18px);
+  background: var(--purple);
+}
+
+.switch input:disabled + .switch-track {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
 /* =========================================================
@@ -354,17 +463,72 @@ button:disabled {
   cursor: wait;
 }
 
+button.stop-mode {
+  background: var(--red);
+  color: #1a0000;
+}
+
+button.stop-mode:hover {
+  background: #ff6668;
+}
+
 /* =========================================================
    STATUS
 ========================================================= */
+
+.status-row {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+
+  margin-top: 14px;
+}
+
+.light-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 44px;
+
+  border: 1px solid #202020;
+  border-radius: 8px;
+
+  background: #0c0c0c;
+}
+
+.light-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+
+  background: var(--gray-dark);
+
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+
+  transition: background .25s ease, box-shadow .25s ease;
+}
+
+.light-dot.is-red {
+  background: var(--red);
+  box-shadow: 0 0 10px rgba(255,77,79,.65);
+}
+
+.light-dot.is-green {
+  background: var(--green);
+  box-shadow: 0 0 10px rgba(61,220,132,.65);
+}
 
 .status {
   display: flex;
   align-items: center;
 
-  min-height: 44px;
+  flex: 1;
 
-  margin-top: 14px;
+  min-height: 44px;
 
   padding: 0 13px;
 
@@ -391,6 +555,44 @@ button:disabled {
   border-radius: 50%;
 
   background: var(--lime);
+}
+
+/* =========================================================
+   EXCEL LINK
+========================================================= */
+
+.excel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-top: 16px;
+
+  font-size: 10.5px;
+  font-weight: 700;
+
+  letter-spacing: .06em;
+
+  color: var(--gray);
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition: color .18s ease;
+}
+
+.excel-link:hover {
+  color: var(--lime);
+}
+
+.excel-link-icon {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--gray-dark);
 }
 
 /* =========================================================
@@ -587,8 +789,27 @@ button:disabled {
       </div>
 
 
+      <!-- AUTO SWITCH -->
+
+      <div class="auto-field">
+
+        <div class="auto-copy">
+          <div class="auto-copy-title">Modo Auto</div>
+          <div class="auto-copy-sub" id="autoSub">
+            Recorre toda la lista de industrias, enviando 1 nicho cada 20s, con el mismo país/ciudad.
+          </div>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="autoToggle">
+          <span class="switch-track"></span>
+        </label>
+
+      </div>
+
+
       <button id="go">
-        INICIAR SCRAPING
+        INICIAR BÚSQUEDA
       </button>
 
     </div>
@@ -596,12 +817,25 @@ button:disabled {
 
     <!-- STATUS -->
 
-    <div
-      class="status"
-      id="status"
-    >
-      Listo para comenzar.
+    <div class="status-row">
+
+      <div class="light-box">
+        <span class="light-dot" id="lightDot"></span>
+      </div>
+
+      <div
+        class="status"
+        id="status"
+      >
+        Listo para comenzar.
+      </div>
+
     </div>
+
+    <a class="excel-link" id="excelLink">
+      <span class="excel-link-icon"></span>
+      Ver leads en Excel / Sheets (requiere contraseña)
+    </a>
 
 
     <!-- FOOTER -->
@@ -632,34 +866,71 @@ button:disabled {
 const WEBHOOK_URL =
 'https://caroyln-squeakier-syreeta.ngrok-free.dev/webhook/arx-lead-scraper';
 
+// Enlace de Google Sheets protegido con contraseña.
+const SHEETS_URL =
+'https://docs.google.com/spreadsheets/d/1J6CjTPM-wBAW4QolWn3W2vI-K-adCGCwTL27PCgYrKk/edit?usp=sharing';
+const SHEETS_PASSWORD = '182365';
+
+// Lista completa de nichos para el modo Auto.
+const INDUSTRIAS = [
+  'Abogado', 'Academia', 'Administración', 'Agencia', 'Agencias de captación de leads',
+  'Agencias de viajes y turismo', 'Alquiler', 'Aparthotel', 'Asesor', 'Automotriz',
+  'Banca', 'Banco', 'Bienes', 'Cabaña', 'Call center', 'Catering', 'Cerrajero',
+  'Cerrajería', 'Cirugía', 'Clínica', 'Clínicas', 'Consulting', 'Consultor',
+  'Consultores y asesores', 'Contabilidad', 'Contador', 'Decoración', 'Dental',
+  'Dentista', 'Depilación', 'Distribuidora', 'Doctor', 'E-commerce', 'Ecommerce',
+  'Educación', 'Electricista', 'Empresas de logística y transportes',
+  'Escuela de manejo', 'Estética', 'Eventos', 'Farmacia', 'Fintech', 'Fisioterapia',
+  'Fontanería', 'Gestión de inventario', 'Gimnasio', 'Ginecología', 'Hostal', 'Hotel',
+  'Hotelería', 'Hoteles y hostales', 'Inmobiliaria', 'Kinesiología', 'Limpieza',
+  'Logística', 'Manicura', 'Manicurista', 'Maquillaje', 'Marketing y contenido',
+  'Masajista', 'Maxilofacial', 'Médico', 'Médicos', 'Notaría', 'Odontología',
+  'Odontólogo', 'Oftalmología', 'Peluquería', 'Pestañas', 'Plomería', 'Psicología',
+  'Publicidad', 'Quiropráctico', 'Real state', 'Realty', 'Recruiting', 'Restaurant',
+  'Restaurante', 'Seguro', 'Seguros', 'Spa', 'Tatuajes', 'Telemedicina', 'Turismo',
+  'Veterinaria', 'Yoga'
+];
+
+const AUTO_INTERVAL_MS = 20000;
+
 const $ = id => document.getElementById(id);
 
+let autoTimer = null;      // setInterval del modo Auto
+let autoIndex = 0;         // posición actual en INDUSTRIAS
+let autoRunning = false;   // si el bucle Auto está activo
+let lightTimer = null;     // setTimeout de la luz roja -> verde
 
-$('go').onclick = async () => {
+/* =========================================================
+   LUZ DE ESTADO
+   Roja al iniciar una búsqueda, verde a los 20s,
+   hasta que se vuelva a iniciar.
+========================================================= */
 
-  if (WEBHOOK_URL.startsWith('PEGA_')) {
+function setLightRed() {
+  clearTimeout(lightTimer);
 
-    $('status').textContent =
-      'Primero coloca en WEBHOOK_URL la URL Production del nodo Dashboard Webhook de n8n.';
+  const dot = $('lightDot');
+  dot.classList.remove('is-green');
+  dot.classList.add('is-red');
 
-    return;
-  }
+  lightTimer = setTimeout(() => {
+    dot.classList.remove('is-red');
+    dot.classList.add('is-green');
+  }, AUTO_INTERVAL_MS);
+}
 
+/* =========================================================
+   ENVÍO DE UNA BÚSQUEDA AL WEBHOOK
+========================================================= */
 
-  if (!$('nicho').value.trim()) {
+async function sendSearch(nicho, modo) {
 
-    $('status').textContent =
-      'Indica un nicho antes de comenzar.';
-
-    return;
-  }
-
-
-  $('go').disabled = true;
+  setLightRed();
 
   $('status').textContent =
-    'Enviando búsqueda a ARX MEDIA…';
-
+    modo === 'auto'
+      ? `Modo Auto: enviando "${nicho}"…`
+      : 'Enviando búsqueda a ARX MEDIA…';
 
   try {
 
@@ -674,8 +945,7 @@ $('go').onclick = async () => {
 
         body: JSON.stringify({
 
-          nicho:
-            $('nicho').value.trim(),
+          nicho: nicho,
 
           pais:
             $('pais').value,
@@ -684,36 +954,160 @@ $('go').onclick = async () => {
             $('ciudad').value.trim(),
 
           cantidad:
-            Number($('cantidad').value) || 100
+            Number($('cantidad').value) || 100,
+
+          modo: modo
 
         })
       }
     );
 
-
     $('status').textContent =
       r.ok
+        ? (modo === 'auto'
+            ? `Enviado "${nicho}". Siguiente nicho en 20s…`
+            : 'Scraping iniciado. Puedes cerrar esta ventana; n8n continuará procesando los leads.')
+        : 'No se pudo iniciar el workflow (' + r.status + ').';
 
-        ? 'Scraping iniciado. Puedes cerrar esta ventana; n8n continuará procesando los leads.'
-
-        : 'No se pudo iniciar el workflow (' +
-          r.status +
-          ').';
-
+    return r.ok;
 
   } catch (e) {
 
     $('status').textContent =
       'Error de conexión con n8n. Revisa la URL del webhook y CORS.';
 
-
-  } finally {
-
-    $('go').disabled = false;
+    return false;
 
   }
+}
+
+/* =========================================================
+   MODO AUTO
+   Envía 1 nicho cada 20s hasta agotar la lista.
+========================================================= */
+
+function startAuto() {
+
+  autoRunning = true;
+  autoIndex = 0;
+
+  $('autoToggle').disabled = true;
+  $('nicho').disabled = true;
+  $('go').textContent = 'DETENER AUTOMATIZACIÓN';
+  $('go').classList.add('stop-mode');
+
+  const step = async () => {
+
+    if (autoIndex >= INDUSTRIAS.length) {
+      stopAuto('Lista completada. Se recorrieron todas las industrias.');
+      return;
+    }
+
+    const nicho = INDUSTRIAS[autoIndex];
+    $('nicho').value = nicho;
+
+    autoIndex++;
+
+    await sendSearch(nicho, 'auto');
+  };
+
+  step();
+  autoTimer = setInterval(step, AUTO_INTERVAL_MS);
+}
+
+function stopAuto(finalMessage) {
+
+  autoRunning = false;
+
+  clearInterval(autoTimer);
+  autoTimer = null;
+
+  $('autoToggle').disabled = false;
+  $('nicho').disabled = false;
+  $('go').textContent = 'INICIAR BÚSQUEDA';
+  $('go').classList.remove('stop-mode');
+
+  if (finalMessage) {
+    $('status').textContent = finalMessage;
+  }
+}
+
+/* =========================================================
+   BOTÓN PRINCIPAL
+========================================================= */
+
+$('go').onclick = async () => {
+
+  if (WEBHOOK_URL.startsWith('PEGA_')) {
+
+    $('status').textContent =
+      'Primero coloca en WEBHOOK_URL la URL Production del nodo Dashboard Webhook de n8n.';
+
+    return;
+  }
+
+  // Si el modo Auto está corriendo, este click lo detiene.
+  if (autoRunning) {
+    stopAuto('Automatización detenida manualmente.');
+    return;
+  }
+
+  const autoMode = $('autoToggle').checked;
+
+  if (autoMode) {
+    startAuto();
+    return;
+  }
+
+  // Modo manual (comportamiento original)
+
+  if (!$('nicho').value.trim()) {
+
+    $('status').textContent =
+      'Indica un nicho antes de comenzar.';
+
+    return;
+  }
+
+  $('go').disabled = true;
+
+  await sendSearch($('nicho').value.trim(), 'manual');
+
+  $('go').disabled = false;
 
 };
+
+/* =========================================================
+   TOGGLE AUTO: solo cambia la copy de ayuda, no dispara nada
+========================================================= */
+
+$('autoToggle').addEventListener('change', () => {
+
+  $('autoSub').textContent =
+    $('autoToggle').checked
+      ? 'Al pulsar "INICIAR BÚSQUEDA" se recorrerán las ' + INDUSTRIAS.length + ' industrias (1 cada 20s) con el país/ciudad indicados.'
+      : 'Recorre toda la lista de industrias, enviando 1 nicho cada 20s, con el mismo país/ciudad.';
+});
+
+/* =========================================================
+   ENLACE DE EXCEL / SHEETS PROTEGIDO CON CONTRASEÑA
+========================================================= */
+
+$('excelLink').addEventListener('click', (e) => {
+
+  e.preventDefault();
+
+  const pass = window.prompt('Introduce la contraseña para ver los leads:');
+
+  if (pass === null) return;
+
+  if (pass.trim() === SHEETS_PASSWORD) {
+    window.open(SHEETS_URL, '_blank');
+  } else {
+    $('status').textContent = 'Contraseña incorrecta.';
+  }
+
+});
 
 </script>
 
